@@ -18,7 +18,7 @@
 
 ## Backlog
 
-[View the Sprint Plan]([https://docs.google.com/spreadsheets/d/1bFknVXY7FlzeFsWu55ukKkjZbq8C_RPbGdnfwVOcJKI/edit?usp=sharing](https://docs.google.com/document/d/1ba09P1LtX2oa4Xgsw8PJ3S9JoSZA7rdLhsY1Vzfunj0/edit?tab=t.0))
+[View the Sprint Plan](https://docs.google.com/document/d/1ba09P1LtX2oa4Xgsw8PJ3S9JoSZA7rdLhsY1Vzfunj0/edit?tab=t.0)
 
 ---
 
