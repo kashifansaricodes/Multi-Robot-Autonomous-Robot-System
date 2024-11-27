@@ -16,7 +16,7 @@ Walker::Walker() : Node("walker"), rotation_direction_(1.0) {
                          .history(rclcpp::HistoryPolicy::KeepLast);
 
   scan_subscriber_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
-      "/scan", qos_profile,
+      "/front_3d_lidar/lidar_points", qos_profile,
       std::bind(&Walker::scan_callback, this, std::placeholders::_1));
 
   current_state_ = new ForwardState();

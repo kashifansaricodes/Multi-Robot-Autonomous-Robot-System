@@ -22,18 +22,23 @@ def generate_launch_description():
         package='walker',
         executable='robot_control',
         name='walker',
-        output='screen'
+        output='screen',
+        parameters=[{
+            'use_sim_time': True  # Important for Isaac Sim time synchronization
+        }]
     )
     
-    # ROS bag recording process
+    # ROS bag recording process - updated topics for Isaac Sim
     rosbag_record = ExecuteProcess(
         condition=IfCondition(LaunchConfiguration('record')),
         cmd=[[
             FindExecutable(name='ros2'),
             ' bag record',
-            ' -a',
-            ' --exclude "/camera/.*"',
-            ' -o walker_recording_',
+            ' /cmd_vel',
+            ' /back_2d_lidar/scan',
+            ' /chassis/odom',
+            ' /chassis/imu',
+            ' -o carter_walker_recording_',
             timestamp,
         ]],
         shell=True
