@@ -1,225 +1,145 @@
-# MULTI-ROBOT MAP MERGING      [Code: MuRoMM]
+# ROS2 Walker Algorithm with Finite State Machine (FSM)
 
+---
+![Screenshot from 2024-11-24 17-39-18](https://github.com/user-attachments/assets/8eac3691-4d57-4a58-9108-fd5990a065a7)
+---
+[Watch the video here](https://drive.google.com/file/d/1c8wnbFrWuQQHwjEAGf4uR8vH-duCqmn8/view?usp=sharing)
+---
 
-![Screenshot from 2024-11-16 19-20-20](https://github.com/user-attachments/assets/2dde64ba-3bc4-45b3-98a7-5ec59935a6ba)
+A ROS2 implementation of a Roomba-like walker algorithm for the Turtlebot3 using the State Design Pattern. The robot autonomously navigates by moving forward until it encounters obstacles, then rotates in alternating directions until finding a clear path.
 
+The FSM used has two states that control the robot's movement:
 
-![Screenshot from 2024-11-19 18-59-31](https://github.com/user-attachments/assets/bc097d65-2ae6-4a29-b4a4-ef06c7e8e7ca)
+ForwardState: 
+Moves straight (0.5 m/s)
+Switches to rotation if obstacle detected within 0.8m
 
-![CICD Workflow status](https://github.com/Abhishek260101/Warehouse-Autonomous-Robot-System/actions/workflows/run-unit-test-and-upload-codecov.yml/badge.svg) [![codecov](https://codecov.io/gh/Abhishek260101/Warehouse-Autonomous-Robot-System/graph/badge.svg?token=813CD16HJ6)](https://codecov.io/gh/Abhishek260101/Warehouse-Autonomous-Robot-System)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+RotationState: 
+Rotates in place (±0.3 rad/s)
+Initial 10-second rotation
+Continues rotating until path is clear
+Returns to forward state when no obstacles ahead
+The robot uses laser scanning in a 90° front arc to detect obstacles and alternates between these states for basic obstacle avoidance behavior.
 
 ---
 
-## Backlog
+## Prerequisites
 
-[View the Backlog](https://docs.google.com/spreadsheets/d/1bFknVXY7FlzeFsWu55ukKkjZbq8C_RPbGdnfwVOcJKI/edit?usp=sharing)
-
----
-
-## Sprint Plan
-
-[View the Sprint Plan](https://docs.google.com/document/d/1ba09P1LtX2oa4Xgsw8PJ3S9JoSZA7rdLhsY1Vzfunj0/edit?tab=t.0)
-
----
-
-## Overview
-This project implements a multi-robot mapping system using ROS2 Humble that enables two TurtleBot3 robots to explore and map an environment collaboratively. The system combines individual SLAM-generated maps from each robot to create a unified, comprehensive map of the environment.
-
-### Key Features
-- Frontier-based exploration algorithm for autonomous navigation
-- Automatic map expansion and alignment
-- Real-time map merging
-- Multi-robot coordination
-- Visualizations using RViz2
-
-## Dependencies
 - ROS2 Humble
-- Ubuntu 22.04
-- C++17 or higher
-- OpenCV 4.5+
-- TurtleBot3 packages for ROS2
-- Nav2
-- SLAM Toolbox
-- tf2_ros
+- Turtlebot3 packages
+- Gazebo Simulator
 
-### Required ROS2 Packages
+## Features
+- State Pattern implementation for clean, maintainable behavior management
+- Alternating rotation direction for better obstacle avoidance
+- Configurable movement parameters
+- ROS2 bag recording support
+- Structured for unit testing capabilities
+
+### Installation
 ```bash
+# Install ROS2 Turtlebot3 packages if not already installed
 sudo apt update
-sudo apt install ros-humble-turtlebot3
-sudo apt install ros-humble-slam-toolbox
-sudo apt install ros-humble-nav2*
-sudo apt install ros-humble-tf2-ros
-```
+sudo apt install ros-humble-turtlebot3*
 
-## Installation
-
-### Build from Source
-```bash
-# Create a ROS2 workspace
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
+# Create workspace
+mkdir -p ~/ros2_ws
+cd ~/ros2_ws
 
 # Clone the repository
-git clone https://github.com/Abhishek260101/Warehouse-Atonomous-Robot-System.git
 
 # Install dependencies
-sudo rosdep init  # if not initialized before
+cd ~/ros2_ws
 rosdep update
-rosdep install --from-paths src --ignore-src -r -y
+rosdep install --from-paths src -y -i
 
 # Build the package
-cd ~/ros2_ws
-colcon build --symlink-install
+colcon build
 
-# Source the workspace
+# Source the workspace in every terminal you use
 source install/setup.bash
 ```
 
 ## Usage
 
-### Launch the System
-1. Start the robots and their core functionalities:
+1. Set the Turtlebot3 model:
 ```bash
-ros2 launch multi_robot_exploration bringup_robots.launch.py
+echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
+source ~/.bashrc
 ```
 
-2. Launch SLAM for both robots:
+2. Launch Turtlebot3 in Gazebo (Terminal 1):
 ```bash
-ros2 launch multi_robot_exploration multi_slam.launch.py
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
-3. Start the frontier exploration:
+3. Launch the walker node (Terminal 2):
 ```bash
-ros2 launch multi_robot_exploration frontier_exploration.launch.py
+# Without recording
+ros2 launch walker walker_launch.py
+
+# With rosbag recording
+ros2 launch walker walker_launch.py record:=true
 ```
 
-### Service Calls
-To start the exploration:
+4. (Optional) Visualize in RViz2 (Terminal 3):
 ```bash
-ros2 service call /tb3_0_start std_srvs/srv/Empty
-ros2 service call /tb3_1_start std_srvs/srv/Empty
+ros2 launch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch.py
 ```
 
-### Visualization
-Monitor the exploration progress in RViz2:
+## Implementation Details
+
+### Architecture
+The implementation follows the State Design Pattern with two main states:
+- **Forward State**: Robot moves forward until obstacle detection
+- **Rotating State**: Robot rotates in place until path is clear
+
+### Key Classes
+- `WalkerNode`: Main ROS2 node handling communications
+- `WalkerState`: Abstract base class defining state interface
+- `ForwardState`: Implements forward movement behavior
+- `RotatingState`: Implements rotation behavior
+
+### Parameters
+- Linear velocity: 0.2 m/s
+- Angular velocity: 0.5 rad/s
+- Minimum obstacle distance: 0.5 m
+
+## Recording and Playing Back Data
+
+Record data:
 ```bash
-ros2 launch multi_robot_exploration rviz.launch.py
+ros2 launch walker walker_launch.py record_bag:=true
 ```
 
-## Project Structure
-```
-multi_robot_exploration/
-├── config/
-│   ├── frontier_params.yaml
-│   └── rviz_config.rviz
-├── include/
-│   └── multi_robot_exploration/
-│       ├── front_expl.hpp
-│       └── map_expansion.hpp
-├── launch/
-│   ├── bringup_robots.launch.py
-│   ├── frontier_exploration.launch.py
-│   └── multi_slam.launch.py
-├── src/
-│   ├── tb3_0_fe.cpp
-│   ├── tb3_1_fe.cpp
-│   └── map_expansion.cpp
-├── test/
-│   ├── test_frontier.cpp
-│   └── test_map_expansion.cpp
-└── package.xml
-```
-
-## Documentation
-Generate documentation using Doxygen:
+Play back recorded data:
 ```bash
-cd ~/ros2_ws/src/multi_robot_exploration
-doxygen Doxyfile
+ros2 bag play path/to/your/bag
 ```
-Access the documentation at `docs/html/index.html`
-
-## Testing
-Run the tests:
-```bash
-cd ~/ros2_ws
-colcon test
-colcon test-result --verbose
-```
-
-Run code coverage:
-```bash
-colcon test --coverage
-```
-
-## Building With Different Types
-By default, the workspace will be built in Release mode. You can specify the build type:
-```bash
-# Debug build
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug
-# Release build
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
-```
-
-## Contributing
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Team
-- [Team Member 1](https://github.com/username1)
-- [Team Member 2](https://github.com/username2)
-
-## References
-- [ROS2 Navigation (Nav2)](https://navigation.ros.org/)
-- [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox)
-- [TurtleBot3 ROS2](https://github.com/ROBOTIS-GIT/turtlebot3/tree/ros2)
-
-## Known Issues
-- Map alignment may need manual adjustment in certain scenarios
-- Frontier detection sensitivity might need tuning based on environment
-- Transform lookups may timeout in large environments
-
-## Future Work
-- Implementation of more sophisticated map merging algorithms
-- Addition of loop closure detection
-- Integration with 3D mapping capabilities
-- Enhanced multi-robot coordination strategies
-- Implementation of lifecycle nodes
-- Addition of parameter services
-- Integration with ROS2 composable nodes
-
-## ROS2-Specific Features
-This implementation takes advantage of ROS2 features including:
-- Lifecycle nodes for better state management
-- Quality of Service (QoS) settings for reliable communication
-- Parameter services for dynamic reconfiguration
-- Action servers for long-running tasks
-- Modern C++ features and ROS2 best practices
-
-## Environment Variables
-Make sure to set these environment variables:
-```bash
-export TURTLEBOT3_MODEL=waffle_pi
-export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/humble/share/turtlebot3_gazebo/models
-```
-
-## Acknowledgments
-- ROS2 Community
-- TurtleBot3 Development Team
-- [Your University/Organization Name]
 
 ## Troubleshooting
-Common issues and solutions:
-1. Transform timeout errors:
-   - Increase transform timeout in parameter files
-2. Navigation issues:
-   - Check Nav2 parameters
-   - Verify map resolution
-3. SLAM issues:
-   - Adjust SLAM Toolbox parameters
-   - Check sensor data
+
+### Common Issues and Solutions
+
+1. If Gazebo client crashes:
+```bash
+export SVGA_VGPU10=0
+export MESA_GL_VERSION_OVERRIDE=3.3
+```
+
+2. Check if topics are being published:
+```bash
+# List all topics
+ros2 topic list
+
+# Monitor velocity commands
+ros2 topic echo /cmd_vel
+
+# Monitor laser scan data
+ros2 topic echo /scan
+```
+
+3. Verify node is running:
+```bash
+ros2 node list
+```
