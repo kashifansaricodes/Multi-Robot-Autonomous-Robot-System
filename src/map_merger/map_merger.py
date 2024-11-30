@@ -52,45 +52,47 @@ def merge_hallway_maps(map1_yaml, map2_yaml):
     total_height = max(map1_img.shape[0], map2_img.shape[0])
     
     # Create merged map
-    merged_map = np.ones((total_height, total_width), dtype=np.uint8) * 205
-    
-    # Define blending weights for overlap region
-    def blend_values(val1, val2):
-        if val1 == 205 and val2 == 205:
-            return 205
-        elif val1 == 205:
-            return val2
-        elif val2 == 205:
-            return val1
-        else:
-            # For occupied space (black) and free space (white), take the more confident value
-            return min(val1, val2)
+    merged_map = np.full((total_height, total_width), 205, dtype=np.uint8)
     
     # Copy first map
-    merged_map[0:map1_img.shape[0], 0:map1_img.shape[1]] = map1_img
+    h1, w1 = map1_img.shape
+    merged_map[0:h1, 0:w1] = map1_img
     
-    # Overlay second map with blending
-    for y in range(map2_img.shape[0]):
-        for x in range(map2_img.shape[1]):
-            target_x = x + (map1_img.shape[1] - center1 - center2)
-            if 0 <= target_x < total_width:
-                map2_val = map2_img[y, x]
-                merged_val = merged_map[y, target_x]
-                merged_map[y, target_x] = blend_values(merged_val, map2_val)
+    # Copy second map with offset
+    h2, w2 = map2_img.shape
+    offset_x = map1_img.shape[1] - center1 - center2
     
-    # Enhance contrast
-    merged_map = cv2.normalize(merged_map, None, 0, 255, cv2.NORM_MINMAX)
+    # Create masks for blending
+    overlap_start = max(0, offset_x)
+    overlap_end = min(offset_x + w2, total_width)
+    overlap_width = overlap_end - overlap_start
     
-    # Create merged yaml data
-    merged_data = map1_data.copy()
-    merged_data['image'] = 'merged_map.pgm'
-    merged_data['origin'] = [
-        min(map1_data['origin'][0], map2_data['origin'][0]),
-        min(map1_data['origin'][1], map2_data['origin'][1]),
-        0.0
-    ]
+    if overlap_width > 0:
+        # Calculate blending weights
+        x = np.linspace(0, 1, overlap_width)
+        alpha = x.reshape(1, -1)
+        
+        # Extract overlapping regions
+        region1 = merged_map[0:h2, overlap_start:overlap_end]
+        region2 = map2_img[:, 0:overlap_width]
+        
+        # Blend only where both maps have data (not unknown space)
+        mask1 = region1 != 205
+        mask2 = region2 != 205
+        
+        # Where both maps have data, use minimum value (darker color)
+        overlap_region = np.where(mask1 & mask2, 
+                                np.minimum(region1, region2),
+                                np.where(mask1, region1, region2))
+        
+        merged_map[0:h2, overlap_start:overlap_end] = overlap_region
     
-    return merged_map, merged_data
+    # Copy non-overlapping part of second map
+    if overlap_end < total_width:
+        merged_map[0:h2, overlap_end:min(overlap_end + w2 - overlap_width, total_width)] = \
+            map2_img[:, overlap_width:]
+    
+    return merged_map, map1_data
 
 def save_merged_map(merged_map, merged_data, output_prefix='merged_map'):
     workspace_path = get_workspace_path()

@@ -12,7 +12,7 @@
 This project implements a multi-robot mapping system using ROS2 Humble that enables two carter robots to explore and map an environment collaboratively. The system combines individual SLAM-generated maps from each robot to create a unified, comprehensive map of the environment.
 
 ### Key Features
-- Frontier-based exploration algorithm for autonomous navigation
+- Frontier-based exploration algorithm for autonomous navigation.
 - Automatic map expansion and alignment
 - Real-time map merging
 - Multi-robot coordination

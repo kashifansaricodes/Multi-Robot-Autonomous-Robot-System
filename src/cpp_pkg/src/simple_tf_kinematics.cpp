@@ -3,7 +3,11 @@
 using namespace std::chrono_literals;
 using namespace std::placeholders;
 
-SimpleTfKinematics::SimpleTfKinematics(const std::string &name) : Node(name), x_increment_(0.05), last_x_(0.0), rotations_counter_(0) {
+SimpleTfKinematics::SimpleTfKinematics(const std::string &name) 
+    : Node(name),
+    last_x_(0.0),
+    x_increment_(0.05),
+    rotations_counter_(0) {
 
     static_tf_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 

@@ -93,8 +93,6 @@ void FrontierExplorer::find_frontiers(const sensor_msgs::msg::LaserScan::SharedP
             map_frame_, base_frame,  // Changed from "map" to map_frame_
             this->now(),
             rclcpp::Duration::from_seconds(1.0));
-            
-        double robot_yaw = tf2::getYaw(transform.transform.rotation);
         
         // Scan ±30° arc for obstacles
         bool path_blocked = false;

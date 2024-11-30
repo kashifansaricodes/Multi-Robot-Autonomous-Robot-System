@@ -35,12 +35,12 @@ private:
     geometry_msgs::msg::TransformStamped dynamic_transform_stamped_;
     double last_x_;
     double x_increment_;
+    int rotations_counter_;
     
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     tf2::Quaternion last_orientation_;
     tf2::Quaternion orientation_increment_;
-    int rotations_counter_;
 };
 
 #endif // SIMPLE_TF_KINEMATICS_HPP
