@@ -1,15 +1,6 @@
-## Copyright (c) 2024, NVIDIA CORPORATION. All rights reserved.
-## NVIDIA CORPORATION and its licensors retain all intellectual property
-## and proprietary rights in and to this software, related documentation
-## and any modifications thereto.  Any use, reproduction, disclosure or
-## distribution of this software and related documentation without an express
-## license agreement from NVIDIA CORPORATION is strictly prohibited.
-
 """
-Example for spawing multiple robots in Gazebo.
-
-This is an example on how to create a launch file for spawning multiple robots into Gazebo
-and launch multiple instances of the navigation stack, each controlling one robot.
+Launching multiple instances of the navigation stack for the multiple robots spawned in isaacsim, 
+each controlling one robot.
 The robots co-exist on a shared environment and are controlled by independent nav stacks
 """
 

@@ -19,6 +19,7 @@ find_package(tf2_geometry_msgs REQUIRED)
 # Install directories
 install(DIRECTORY
 bt_xml launch
+config
 DESTINATION share/${PROJECT_NAME}
 )
 
