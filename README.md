@@ -1,10 +1,12 @@
 # Warehouse Autonomous Robot System using ROS2 and Nav2
 
-A ROS2-based autonomous navigation system for multiple Carter robots in a warehouse environment, implementing behavior trees for sequential waypoint navigation.
+A ROS2-based autonomous navigation system for multiple Carter robots in a warehouse environment, implementing behavior trees for sequential waypoint navigation of the multirobot collaboration.
+
+![image](https://github.com/user-attachments/assets/92cbc599-bb1f-4946-bc85-e5e0eafd4ce7)
 
 [Watch the video](https://drive.google.com/file/d/1s0M8ixJkOtuMZOorUhYAKdYYp5o6chku/view?usp=sharing)
 
-
+---
 ## Features
 
 - 🤖 Multi-robot autonomous navigation using ROS2 and Nav2
