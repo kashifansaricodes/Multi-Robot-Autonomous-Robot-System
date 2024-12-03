@@ -2,11 +2,8 @@
 
 A ROS2-based autonomous navigation system for multiple Carter robots in a warehouse environment, implementing behavior trees for sequential waypoint navigation.
 
-<p align="center">
-  <img src="docs/images/carter_robot.png" alt="Carter Robot" width="600"/>
-</p>
+[Watch the video](https://drive.google.com/file/d/1s0M8ixJkOtuMZOorUhYAKdYYp5o6chku/view?usp=sharing)
 
-[![Watch the video](https://img.youtube.com/vi/<VIDEO_ID>/0.jpg)](https://www.youtube.com/watch?v=<VIDEO_ID>)
 
 ## Features
 
