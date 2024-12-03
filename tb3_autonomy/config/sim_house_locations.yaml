@@ -1,5 +1,5 @@
 # Defines object locations as [x, y, theta]
-location1: [6.085, -1.311, -2.356 ]
-location2: [-1.0, 2.5, 0.785]
-location3: [-6.0, 3.0, 1.571]
-location4: [1.05, -1.47, -1.571]
+location1: [-10.5779, 0.8917, 1.6376]    # (theta calculated from z: 0.7273, w: 0.6863)
+location2: [-10.1595, 11.2462, -3.1379]  # (theta calculated from z: -0.9999, w: 0.0018)
+location3: [-10.5338, 1.2766, -1.3744]   # (theta calculated from z: -0.6341, w: 0.7732)
+location4: [-1.7408, 2.1688, -1.0472]    # (theta calculated from z: -0.5004, w: 0.8658)
