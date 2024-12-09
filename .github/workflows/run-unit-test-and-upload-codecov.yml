@@ -1,5 +1,4 @@
-name: Unit Tests
-
+name: Run tests and upload coverage
 on:
   push:
     branches: [ main ]
@@ -7,14 +6,18 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  test:
+    name: Run tests and collect coverage
     runs-on: ubuntu-22.04
     container:
       image: ros:humble
 
     steps:
-    - uses: actions/checkout@v3
-      
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
     - name: Install dependencies
       run: |
         apt-get update
@@ -41,27 +44,17 @@ jobs:
       run: |
         . /opt/ros/humble/setup.sh
         . install/setup.sh
+        lcov --directory build/frontier_explorer --capture --output-file coverage.info
+        lcov --remove coverage.info '/opt/*' '/usr/*' '*/test/*' --output-file coverage.filtered
+        genhtml coverage.filtered --output-directory coverage_report
         
-        # Create coverage report
-        lcov --directory build/frontier_explorer --capture \
-          --output-file coverage.info
-          
-        # Filter out system and test files
-        lcov --remove coverage.info \
-          '/opt/*' '/usr/*' '*/test/*' \
-          --output-file coverage.filtered
-          
-        # Generate HTML report
-        genhtml coverage.filtered \
-          --output-directory coverage_report
+    - name: Upload results to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
       with:
         name: code-coverage-report
         path: coverage_report
-
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
