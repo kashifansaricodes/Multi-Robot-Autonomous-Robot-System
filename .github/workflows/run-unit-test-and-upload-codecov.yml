@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y python3-colcon-common-extensions lcov gcovr
+        apt-get install -y python3-colcon-common-extensions lcov gcovr curl jq gpg
         rosdep update
         rosdep install --from-paths . --ignore-src -r -y
         
