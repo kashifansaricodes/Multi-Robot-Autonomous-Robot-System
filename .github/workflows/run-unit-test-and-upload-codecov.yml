@@ -45,7 +45,9 @@ jobs:
         . /opt/ros/humble/setup.sh
         . install/setup.sh
         lcov --directory build/frontier_explorer --capture --output-file coverage.info
-
+        lcov --remove coverage.info '/opt/*' '/usr/*' '*/test/*' --output-file coverage.filtered
+        genhtml coverage.filtered --output-directory coverage_report
+        
     - name: Upload results to Codecov
       uses: codecov/codecov-action@v5
       with:
