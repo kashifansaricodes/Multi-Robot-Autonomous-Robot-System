@@ -45,22 +45,25 @@ jobs:
         . /opt/ros/humble/setup.sh
         . install/setup.sh
         
-        # Create coverage report
+        # Create initial coverage report
         lcov --directory build/frontier_explorer --capture \
           --output-file coverage.info
           
-        # Filter out system and test files
+        # Be more explicit with filtering and use absolute paths
         lcov --remove coverage.info \
-          '/opt/*' '/usr/*' '*/test/*' '*/build/*' \
+          '/opt/*' '/usr/*' '*/test/*' '*/build/*' '*/install/*' \
           --output-file coverage.filtered
-          
-        # Print the coverage report to verify
-        lcov --list coverage.filtered
         
-    - name: Upload results to Codecov
+        # Print filtered report to verify
+        echo "=== Filtered Coverage Report ==="
+        lcov --list coverage.filtered
+  
+    - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.filtered
+        fail_ci_if_error: true
 
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
