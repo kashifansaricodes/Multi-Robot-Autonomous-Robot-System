@@ -1,0 +1,10 @@
+free_thresh: 0.25
+image: carter_hospital_navigation.png
+mode: trinary
+negate: 0
+occupied_thresh: 0.65
+origin:
+- -16
+- -4.02
+- 0
+resolution: 0.05

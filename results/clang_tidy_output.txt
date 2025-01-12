@@ -1,0 +1,2 @@
+kashif@kashifpc:~/SDR/Warehouse-Autonomous-Robot-System/src/frontier_explorer/src$ clang-tidy -p compile_commands.json --extra-arg=-std=c++17 src/frontier_explorer.cpp src/main.cpp
+kashif@kashifpc:~/SDR/Warehouse-Autonomous-Robot-System/src/frontier_explorer/src$
