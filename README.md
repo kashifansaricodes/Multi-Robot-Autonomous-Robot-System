@@ -207,5 +207,4 @@ lcov --directory build/frontier_explorer --capture --output-file coverage.info
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ---
-
-Let me know if you’d like this exported as a `.md` file or preview version!
+---
