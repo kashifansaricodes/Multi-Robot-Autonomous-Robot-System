@@ -1,172 +1,211 @@
-# MULTI-ROBOT MAP MERGING      [Code: MuRoMM]
 
+# 🚧 Warehouse Autonomous Map Merging and Navigation System [Code: MuRoMM]
 
+[![CI/CD](https://github.com/Abhishek260101/Warehouse-Autonomous-Robot-System/actions/workflows/run-unit-test-and-upload-codecov.yml/badge.svg)](https://github.com/Abhishek260101/Warehouse-Autonomous-Robot-System/actions) [![codecov](https://codecov.io/gh/Abhishek260101/Warehouse-Autonomous-Robot-System/graph/badge.svg?token=813CD16HJ6)](https://codecov.io/gh/Abhishek260101/Warehouse-Autonomous-Robot-System) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+---
 
-![CICD Workflow status](https://github.com/Abhishek260101/Warehouse-Autonomous-Robot-System/actions/workflows/run-unit-test-and-upload-codecov.yml/badge.svg) [![codecov](https://codecov.io/gh/Abhishek260101/Warehouse-Autonomous-Robot-System/graph/badge.svg?token=813CD16HJ6)](https://codecov.io/gh/Abhishek260101/Warehouse-Autonomous-Robot-System)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+## 🧠 Project Overview
 
+An integrated multi-robot autonomous system using **ROS2 Humble** and **Nav2**, that combines:
 
+- Main Branch consists:
+- 🤖 **Multi-Robot Mapping and Merging** using SLAM and Frontier Exploration
+  
+- BT Branch consists: 
+- 🌳 **Behavior Tree-based Sequential Navigation** for collaborative warehouse tasks 
 
-![Screenshot from 2024-11-25 18-22-57](https://github.com/user-attachments/assets/28cdfd28-a9a3-421e-9036-5036623a605d)
+---
 
+### 📸 Visual Demonstrations
+
+#### 🔷 Map Merging
+![Screenshot from 2024-11-25 18-22-57](https://github.com/user-attachments/assets/28cdfd28-a9a3-421e-9036-5036623a605d)  
 ![Screenshot from 2024-12-03 22-12-22](https://github.com/user-attachments/assets/1dbd852e-a369-46d4-9235-1405306669f1)
 
+#### 🔷 Behavior Tree Navigation  
+![image](https://github.com/user-attachments/assets/92cbc599-bb1f-4946-bc85-e5e0eafd4ce7)
 
-## Resources
+---
 
-- **Video Demonstration**: [View on Google Drive](https://drive.google.com/file/d/1XcQE9ShOaLuXS3wf0k5WA8yWZw5_CSXs/view?usp=sharing)
-- **Backlog**: [View the Backlog Spreadsheet](https://docs.google.com/spreadsheets/d/1bFknVXY7FlzeFsWu55ukKkjZbq8C_RPbGdnfwVOcJKI/edit?usp=sharing)
-- **Sprint Plan**: [View the Sprint Plan Document](https://docs.google.com/document/d/1ba09P1LtX2oa4Xgsw8PJ3S9JoSZA7rdLhsY1Vzfunj0/edit?usp=sharing)
+### 🎥 Video Demonstrations
 
-## Overview
-This project implements a multi-robot mapping system using ROS2 Humble that enables two carter robots to explore and map an environment collaboratively. The system combines individual SLAM-generated maps from each robot to create a unified, comprehensive map of the environment.
+- [Map Merging Demo](https://drive.google.com/file/d/1XcQE9ShOaLuXS3wf0k5WA8yWZw5_CSXs/view?usp=sharing)  
+- [Behavior Tree Navigation Demo](https://drive.google.com/file/d/1s0M8ixJkOtuMZOorUhYAKdYYp5o6chku/view?usp=sharing)
 
-### Key Features
-- Frontier-based exploration algorithm for autonomous navigation
-- Automatic map expansion and alignment
-- Real-time map merging
-- Multi-robot coordination
-- Visualizations using RViz2
+---
 
-## Dependencies
-- ROS2 Humble
-- Ubuntu 22.04
-- C++17 or higher
-- OpenCV 4.5+
-- Nav2
-- SLAM Toolbox
-- tf2_ros
+## 🔑 Key Features
 
-### Required ROS2 Packages
+### 🗺️ Multi-Robot Mapping
+- Collaborative SLAM with `SLAM Toolbox`
+- Real-time map merging and stitching
+- Frontier-based exploration
+- Map saving and post-processing
+
+### 🌳 Behavior Tree Navigation
+- Modular waypoint-driven execution
+- XML-defined behavior trees
+- YAML-based zone configuration
+- BT-based navigation, recovery, and control actions
+
+### 🚧 Real-Time Capabilities
+- Dynamic environment mapping
+- Obstacle avoidance with path re-planning
+- Multi-robot RViz visualization support
+
+---
+
+## 📁 Project Structure
+
 ```bash
-sudo apt update
-sudo apt install ros-humble-turtlebot3
-sudo apt install ros-humble-slam-toolbox
-sudo apt install ros-humble-nav2*
-sudo apt install ros-humble-tf2-ros
+.
+├── frontier_explorer/     # Mapping and merging package
+├── tb3_autonomy/          # BT-based autonomy system
+├── map_merger/            # Scripts to merge saved maps
+├── bt_xml/                # Behavior tree definitions
+├── config/                # Parameters and waypoints
+├── launch/                # All ROS2 launch files
 ```
 
-## Installation
+---
 
-### Build from Source
+## ⚙️ Installation
+
+### Requirements
+
+- Ubuntu 22.04  
+- ROS2 Humble  
+- Nav2, SLAM Toolbox  
+- BehaviorTree.CPP v3  
+- Isaac Sim (optional for sim testing)
+
+### Setup
+
 ```bash
-# Create a ROS2 workspace
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
+# Create workspace
+mkdir -p ~/warehouse_ws/src && cd ~/warehouse_ws/src
 
-# Clone the repository
-git clone https://github.com/Abhishek260101/Warehouse-Atonomous-Robot-System.git
+# Clone
+git clone https://github.com/Abhishek260101/Warehouse-Autonomous-Robot-System.git
 
 # Install dependencies
-sudo rosdep init  # if not initialized before
-rosdep update
+cd ~/warehouse_ws
 rosdep install --from-paths src --ignore-src -r -y
 
-# Build the package
-cd ~/ros2_ws
-colcon build --symlink-install
-
-# Source the workspace
+# Build
+colcon build
 source install/setup.bash
 ```
 
-## Usage
+---
 
-### Launch the System
-1. Start the robots and their core functionalities:
+## 🚀 Usage
+
+### 🗺️ Launch Multi-Robot Mapping & Merging
+
 ```bash
 ros2 launch frontier_explorer complete.launch.xml
 ```
 
-2. Rviz Visualization
+Save maps:
 ```bash
-# For carter1
-ros2 run rviz2 rviz2 --ros-args -r /tf:=/carter1/tf -r /tf_static:=/carter1/tf_static
-
-# In another terminal for carter2
-ros2 run rviz2 rviz2 --ros-args -r /tf:=/carter2/tf -r /tf_static:=/carter2/tf_static
-```
-
-3. To save maps generated by SLAM Toolbox, you can use the map_saver_cli tool from nav2_map_server package.
-```bash
-# For carter1's map
 ros2 run nav2_map_server map_saver_cli -f carter1_map --ros-args -r map:=/carter1/map
-
-# For carter2's map
 ros2 run nav2_map_server map_saver_cli -f carter2_map --ros-args -r map:=/carter2/map
 ```
 
-4. To merge the map save the maps in workspace root and run the map_merger.py script from the map_merger folder
-
-
-## Project Structure
-```
-src/frontier_explorer/
-├── CMakeLists.txt
-├── config
-│   └── slam_toolbox_config.yaml
-├── include
-│   └── frontier_explorer
-│       └── frontier_explorer.hpp
-├── launch
-│   ├── complete.launch.xml
-│   └── slam.launch.xml
-├── package.xml
-├── src
-│   ├── frontier_explorer.cpp
-│   └── main.cpp
-└── test
-    └── frontier_explorer_test.cpp
-
+Merge maps:
+```bash
+python3 map_merger/merge_maps.py
 ```
 
-## Testing & Coverage
-```
-colcon build --packages-select frontier_explorer
-colcon test --packages-select frontier_explorer --event-handlers console_direct+
+---
 
+### 🌳 Launch Behavior Tree Navigation
+
+1. Launch simulation or real robots  
+2. Run Isaac Sim nav setup (if applicable):
+```bash
+ros2 launch carter_navigation multiple_robot_carter_navigation_hospital.launch.py
+```
+
+3. Run BT-based autonomy:
+```bash
+ros2 launch tb3_autonomy autonomy.launch.py
+```
+
+4. Monitor:
+```bash
+ros2 topic echo /carter1/amcl_pose
+ros2 topic echo /carter1/behavior_tree_log
+```
+
+---
+
+## 🔧 Configuration
+
+### 📍 Waypoints (YAML)
+```yaml
+location1: [-10.5779, 0.8917, 1.6376]
+location2: [-10.1595, 11.2462, -3.1379]
+location3: [-10.5338, 1.2766, -1.3744]
+location4: [-1.7408, 2.1688, -1.0472]
+```
+
+### 🌳 Behavior Tree (XML)
+Defined in: `bt_xml/tree.xml`  
+Can include actions like `navigate_to_pose`, `spin`, `wait`, etc.
+
+---
+
+## 🧪 Testing & Coverage
+
+```bash
+colcon test --packages-select frontier_explorer
 lcov --directory build/frontier_explorer --capture --output-file coverage.info
-lcov --remove coverage.info '/opt/*' '/usr/*' '*/test/*' --output-file coverage.filtered
-genhtml coverage.filtered --output-directory coverage_report
 ```
 
+---
 
-## Contributing
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## 🛠️ Troubleshooting
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+| Problem                  | Solution                                                                 |
+|--------------------------|--------------------------------------------------------------------------|
+| TF timeout               | Increase transform timeout in config files                               |
+| Nav2 failures            | Verify server is active, check transforms and action interfaces          |
+| SLAM drift               | Adjust SLAM Toolbox tuning parameters                                    |
+| BT gets stuck            | Check `/behavior_tree_log` and action server availability                |
 
-## Team
-- Abhishek Avhad
-- Kashif Ansari
+---
+
+## 🧩 Known Issues
+
+- Map alignment may require manual tweaking  
+- Large-scale environments might cause transform lookup failures  
+- Isaac Sim compatibility may depend on version
+
+---
+
+## 🔭 Future Work
+
+- Enhance map merging accuracy using ICP/Graph SLAM  
+- Extend to 3D mapping and perception  
+- Develop robust inter-robot coordination logic  
+
+---
+
+## 👥 Contributors
+
+- Abhishek Avhad  
+- Kashif Ansari  
 - Piyush Goenka
 
-## Known Issues
-- Map alignment may need manual adjustment in certain scenarios
-- Frontier detection sensitivity might need tuning based on environment
-- Transform lookups may timeout in large environments
+---
 
-## Future Work
-- Implementation of more sophisticated map merging algorithms
-- Integration with 3D mapping capabilities
-- Enhanced multi-robot coordination strategies
+## 📜 License
 
-## Acknowledgments
-- ROS2 Community
-- NVidia community
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
-## Troubleshooting
-Common issues and solutions:
-1. Transform timeout errors:
-   - Increase transform timeout in parameter files
-2. Navigation issues:
-   - Check Nav2 parameters
-   - Verify map resolution
-3. SLAM issues:
-   - Adjust SLAM Toolbox parameters
-   - Check sensor data
+---
+
+Let me know if you’d like this exported as a `.md` file or preview version!
