@@ -22,7 +22,7 @@ An integrated multi-robot autonomous system using **ROS2 Humble** and **Nav2**, 
 
 ### 📸 Visual Demonstrations
 
-#### 🔷 Map Merging (fetched from individual robots)
+#### 🔷 Map Merging (Fetched from individual robots)
 ![Screenshot from 2025-03-30 21-49-41](https://github.com/user-attachments/assets/e78938eb-c927-45f1-9060-4744cb2f3710)
 
 
