@@ -22,12 +22,12 @@ An integrated multi-robot autonomous system using **ROS2 Humble** and **Nav2**, 
 
 ### 📸 Visual Demonstrations
 
-#### 🔷 Map Merging
+#### 🔷 Map Merging (fetched from individual robots)
 ![Screenshot from 2025-03-30 21-49-41](https://github.com/user-attachments/assets/e78938eb-c927-45f1-9060-4744cb2f3710)
 
 
 ---
-#### 🔷 Behavior Tree Navigation  
+#### 🔷 Behavior Tree Navigation (Testing over the merged map)   
 ![Screenshot from 2025-03-30 21-49-22](https://github.com/user-attachments/assets/8f768811-8d6d-4846-9786-3ca76dd60f04)
 
 ---
