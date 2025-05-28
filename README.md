@@ -38,6 +38,9 @@ An integrated multi-robot autonomous system using **ROS2 Humble** and **Nav2**, 
 - [Behavior Tree Navigation Demo](https://drive.google.com/file/d/1s0M8ixJkOtuMZOorUhYAKdYYp5o6chku/view?usp=sharing)
 
 ---
+- **Backlog**: [View the Backlog Spreadsheet](https://docs.google.com/spreadsheets/d/1bFknVXY7FlzeFsWu55ukKkjZbq8C_RPbGdnfwVOcJKI/edit?usp=sharing)
+- **Sprint Plan**: [View the Sprint Plan Document](https://docs.google.com/document/d/1ba09P1LtX2oa4Xgsw8PJ3S9JoSZA7rdLhsY1Vzfunj0/edit?usp=sharing)
+---
 
 ## 🔑 Key Features
 
